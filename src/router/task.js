@@ -1,5 +1,6 @@
 const express = require('express')
 const Task = require('../models/task')
+const User = require('../models/user')
 const router = new express.Router()
 
 
@@ -16,6 +17,14 @@ router.post('/tasks', async (req, res) => {
         res.status(400).send(error)
     }
 
+})
+
+router.post('/users/login', async (req, res) => {
+    try {
+        const user = await User.findByCredentials(req.body.email, req.body.password)
+    } catch (error) {
+
+    }
 })
 
 router.get('/tasks', async (req, res) => {
