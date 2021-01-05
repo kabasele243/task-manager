@@ -1,13 +1,14 @@
 const express = require('express')
 const Task = require('../models/task')
 const User = require('../models/user')
+const auth = require('../middleware/auth')
 const router = new express.Router()
 
 
-router.post('/tasks', async (req, res) => {
+router.post('/tasks', auth , async (req, res) => {
     const task = new Task({
-        description: req.body.description,
-        done: req.body.done
+       ...req.body ,
+        author: req.user._id
     })
 
     try{
