@@ -3,7 +3,7 @@ const User = require('../models/user')
 const auth = require('../middleware/auth')
 const router = new express.Router()
 
-
+// Create User
 router.post('/users', async (req, res) => {
     const user = new User({
         name: req.body.name,
@@ -22,17 +22,21 @@ router.post('/users', async (req, res) => {
     
 })
 
-router.post('/users/login', auth, async (req, res) => {
+//Login User
+router.post('/users/login', async (req, res) => {
     try{
         const user = await User.findByCredentials(req.body.email, req.body.password)
         const token = await user.generateAuthToken()
-        res.send({user, token})
+        console.log(user)
+        res.send({ user , token})
     } catch(error){
         res.status(400).send()
        
     }
 })
 
+
+// Logout User
 router.post('/users/logout', auth , async (req, res) => {
     try {
         req.user.tokens = req.user.tokens.filter((token) => {
@@ -45,7 +49,8 @@ router.post('/users/logout', auth , async (req, res) => {
     }
 })
 
-router.post('/users/logout', auth, async (req,res) => {
+//Logout All Sessions
+router.post('/users/logoutAll', auth, async (req,res) => {
     
     try {
         req.user.tokens = []
@@ -57,40 +62,13 @@ router.post('/users/logout', auth, async (req,res) => {
 })
 
 
-router.get('/users', auth, async (req, res) => {
-
-    try{
-        const users = await User.find({})
-        res.status(200).send(users)
-    } catch(error) {
-        res.status(400).send(error)
-    }
-
-})
 
 router.get('/users/me', auth, async(req, res) => {
-    res.send(user)
+    res.send(req.user)
 })
 
 
-router.get('/users/:id',async (req, res) => {
-    const _id = req.params.id
-
-    try{
-        
-        const user = await User.findById(_id)
-        if(!user) {
-            return res.status(404).send()
-        }
-        res.status(200).send(user)
-    } catch (error) {
-        res.status(404).send(error)
-    }
-
-})
-
-
-router.patch('/users/:id', async (req,res) => {
+router.patch('/users/me', auth , async (req,res) => {
     const updates = Object.keys(req.body)
     const allow = ['name', 'email', 'password', 'age']
     const isValidOperation = updates.every((update) =>{
@@ -104,20 +82,11 @@ router.patch('/users/:id', async (req,res) => {
     const _id = req.params.id
 
     try {
-        //Enable Mongoose Middleware to Run
-        const user = await User.findById(req.params.id)
-
         updates.forEach((update) => {
-                user[update] = req.body[update]
+                req.user[update] = req.body[update]
         })
-
-        await user.save()
-
-        // const user = await User.findByIdAndUpdate(_id, req.body, {new:true, runValidators: true})
-        if(!user){
-            return res.status(404).send()
-        }
-        res.send(user)
+        await req.user.save()
+        res.send(req.user)
     } catch (error) {
         res.status(400).send(error)
     }
@@ -125,14 +94,11 @@ router.patch('/users/:id', async (req,res) => {
 
 
 
-router.delete('/users', async (req, res) => {
-    const _id = req.params.id
+router.delete('/users/me', auth ,async (req, res) => {
+    const _id = req.user.id
     try{
-        const user = await User.findByIdAndDelete(_id)
-        if(!user) {
-            return res.status(404).send()
-        }
-        res.send(user)
+        await req.user.remove()
+        res.send(req.user)
     } catch(error) {
         res.status(500).send()
     }
