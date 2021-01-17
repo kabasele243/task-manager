@@ -1,4 +1,4 @@
-# WEATHER APP
+# TASK MANAGER
 
 We've built A Note Manager With Node.js.
 
@@ -29,7 +29,7 @@ Please follow these instructions to get this repo ready to run on your local mac
 
 1. Clone this repo
 
-  `git clone https://github.com/SalesVista/backend-exercise-kabasele243.git`
+  `git clone https://github.com/kabasele243/task-manager.git`
 
 2. Install app dependencies from package-lock.json
 
