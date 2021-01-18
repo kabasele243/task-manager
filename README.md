@@ -33,13 +33,9 @@ Please follow these instructions to get this repo ready to run on your local mac
 
 2. Install app dependencies from package-lock.json
 
-  `npm ci`
+  `npm install`
 
-3. Start the database containers (using Docker)
-
-  `npm run db-up`
-
-4. Initialize the database with MongoDB
+3. Initialize the database with MongoDB
 
     Start with the path where you downloaded mongodb mongodb/bin/mongod.exe and then create a mondodb-data folder
 
@@ -47,8 +43,6 @@ Please follow these instructions to get this repo ready to run on your local mac
   `/Users/14042/mongodb/bin/mongod.exe --dbpath=/Users/14042/mongodb-data`
 
 
-
-When you are done working and want to shut down the database containers, run `npm run db-down`. If you want to start them up again, just run `npm run db-up`.
 
 ## Running the application
 
