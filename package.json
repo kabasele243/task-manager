@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "env-cmd  nodemon src/index.js"
   },
   "author": "Franck Kabasele",
   "license": "ISC",
@@ -20,6 +20,7 @@
     "validator": "^13.5.2"
   },
   "devDependencies": {
+    "env-cmd": "^10.1.0",
     "nodemon": "^2.0.6"
   }
 }
