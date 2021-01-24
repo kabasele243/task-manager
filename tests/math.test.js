@@ -1,3 +1,0 @@
-test('The feature work', () => {
-   
-})
